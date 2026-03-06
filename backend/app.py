@@ -74,9 +74,10 @@ def predict():
         # Reorder columns to match training order
         df = df[feature_names]
         
-        # Make prediction
+        # Make prediction (Model now predicts log(price))
         features = df.values
-        prediction = model.predict(features)[0]
+        log_prediction = model.predict(features)[0]
+        prediction = np.expm1(log_prediction) # Inverse log transform
         return jsonify({"predicted_price": round(float(prediction), 2)})
     except Exception as e:
         import traceback
